@@ -7,9 +7,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Denver metro properties with OZ status
 model Property {
   id              String   @id @default(cuid())
+
+  // Location
   address         String
   city            String   @default("Denver")
   state           String   @default("CO")
@@ -24,29 +25,63 @@ model Property {
   ozDesignation     String?
   county            String?
 
-  // Property details
-  propertyType    String?
+  // Assessor IDs
+  schedNum        String?  @unique
+  parcelNum       String?
+  mapNum          String?
+
+  // Zoning
+  zoneId          String?  // e.g. "R-MU-20", "C-MX-5"
+  zoneDescription String?  // e.g. "Residential Mixed Use"
+  propertyClass   String?  // PROP_CLASS code
+  propertyType    String?  // Residential, Commercial, Industrial, Land, Mixed-Use
+  propertyDesc    String?  // D_CLASS_CN e.g. "SFR Grade C"
+
+  // Building details
+  yearBuilt       Int?
+  sqft            Int?     // above-grade area (residential)
+  comGrossArea    Int?     // commercial gross area
+  comNetArea      Int?     // commercial net area
+  comStructType   String?  // commercial structure type
+  totalUnits      Int?
   bedrooms        Int?
   bathrooms       Float?
-  sqft            Int?
-  lotSize         Float?
-  yearBuilt       Int?
   stories         Int?
+  lotSize         Float?   // LAND_AREA in sqft
 
   // Valuation
-  assessedValue   Float?
-  marketValue     Float?
+  appraisedLand   Float?
+  appraisedImprove Float?
+  appraisedTotal  Float?
+  assessedLand    Float?
+  assessedBldg    Float?
+  assessedTotal   Float?
+  exemptAmt       Float?
+  taxableAmt      Float?
+  assessedValue   Float?   // alias for assessedTotal
+  marketValue     Float?   // alias for appraisedTotal
+
+  // Sales history (most recent)
   lastSalePrice   Float?
   lastSaleDate    DateTime?
-  taxAmount       Float?
+  lastSaleYear    Int?
+  saleInstrument  String?  // deed type
 
-  // Listing info
+  // Owner
+  ownerName       String?
+  ownerAddress    String?
+  ownerCity       String?
+  ownerState      String?
+  ownerZip        String?
+
+  // Listing info (from external sources)
   listingStatus   String?
   listPrice       Float?
   listDate        DateTime?
   listingUrl      String?
   listingSource   String?
   daysOnMarket    Int?
+  taxAmount       Float?
 
   // Metadata
   createdAt       DateTime @default(now())
@@ -55,12 +90,32 @@ model Property {
 
   searches        SearchResult[]
   savedBy         SavedProperty[]
+  salesHistory    SaleRecord[]
 
   @@index([latitude, longitude])
   @@index([inOpportunityZone])
   @@index([censusTract])
   @@index([listingStatus])
   @@index([zipCode])
+  @@index([zoneId])
+  @@index([propertyType])
+  @@index([address])
+}
+
+// Individual sale records for full history
+model SaleRecord {
+  id            String   @id @default(cuid())
+  propertyId    String
+  property      Property @relation(fields: [propertyId], references: [id])
+  saleDate      DateTime?
+  saleYear      Int?
+  salePrice     Float?
+  instrument    String?
+  receptionNum  String?
+  createdAt     DateTime @default(now())
+
+  @@index([propertyId])
+  @@index([saleYear])
 }
 
 model SearchResult {
