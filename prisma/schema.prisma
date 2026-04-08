@@ -1,0 +1,125 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Denver metro properties with OZ status
+model Property {
+  id              String   @id @default(cuid())
+  address         String
+  city            String   @default("Denver")
+  state           String   @default("CO")
+  zipCode         String?
+  latitude        Float
+  longitude       Float
+
+  // OZ classification
+  inOpportunityZone Boolean  @default(false)
+  censusTract       String?
+  ozName            String?
+  ozDesignation     String?
+  county            String?
+
+  // Property details
+  propertyType    String?
+  bedrooms        Int?
+  bathrooms       Float?
+  sqft            Int?
+  lotSize         Float?
+  yearBuilt       Int?
+  stories         Int?
+
+  // Valuation
+  assessedValue   Float?
+  marketValue     Float?
+  lastSalePrice   Float?
+  lastSaleDate    DateTime?
+  taxAmount       Float?
+
+  // Listing info
+  listingStatus   String?
+  listPrice       Float?
+  listDate        DateTime?
+  listingUrl      String?
+  listingSource   String?
+  daysOnMarket    Int?
+
+  // Metadata
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  dataSource      String?
+
+  searches        SearchResult[]
+  savedBy         SavedProperty[]
+
+  @@index([latitude, longitude])
+  @@index([inOpportunityZone])
+  @@index([censusTract])
+  @@index([listingStatus])
+  @@index([zipCode])
+}
+
+model SearchResult {
+  id            String   @id @default(cuid())
+  searchQuery   String
+  latitude      Float
+  longitude     Float
+  inOZ          Boolean
+  censusTract   String?
+  ozName        String?
+  propertyId    String?
+  property      Property? @relation(fields: [propertyId], references: [id])
+  createdAt     DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+model SavedProperty {
+  id              String   @id @default(cuid())
+  propertyId      String
+  property        Property @relation(fields: [propertyId], references: [id])
+  notes           String?
+  investmentAmount Float?
+  capitalGain     Float?
+  holdingPeriod   Int?
+  projectedReturn Float?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([propertyId])
+}
+
+model ListingSync {
+  id            String   @id @default(cuid())
+  source        String
+  zipCode       String?
+  censusTract   String?
+  totalFound    Int      @default(0)
+  totalImported Int      @default(0)
+  status        String   @default("pending")
+  errorMessage  String?
+  startedAt     DateTime @default(now())
+  completedAt   DateTime?
+
+  @@index([status])
+  @@index([startedAt])
+}
+
+model OpportunityZone {
+  id              String  @id @default(cuid())
+  tractId         String  @unique
+  name            String
+  county          String
+  state           String  @default("CO")
+  designation     String
+  medianIncome    Float?
+  povertyRate     Float?
+  population      Int?
+  boundaryGeoJson String?
+
+  @@index([county])
+}
