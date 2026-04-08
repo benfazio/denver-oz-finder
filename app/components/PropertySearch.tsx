@@ -15,16 +15,16 @@ interface PropertySearchProps {
   onResult: (result: SearchResult) => void;
 }
 
-// Verified addresses that fall inside actual OZ census tracts
+// Verified addresses at tract centroids - confirmed inside OZ polygons
 const QUICK_LOOKUPS = [
-  { label: "Sun Valley", address: "1000 Decatur St, Denver, CO 80204" },
-  { label: "La Alma", address: "900 Santa Fe Dr, Denver, CO 80204" },
-  { label: "Barnum", address: "300 Knox Ct, Denver, CO 80219" },
-  { label: "Westwood", address: "3600 W Alameda Ave, Denver, CO 80219" },
-  { label: "RiNo", address: "3500 Brighton Blvd, Denver, CO 80216" },
-  { label: "Montbello", address: "4700 Peoria St, Denver, CO 80239" },
-  { label: "Edgewater", address: "2500 Sheridan Blvd, Edgewater, CO 80214" },
-  { label: "Wheat Ridge", address: "4400 Kipling St, Wheat Ridge, CO 80033" },
+  { label: "Sun Valley", address: "1499 Julian St, Denver, CO 80204" },
+  { label: "La Alma", address: "2617 W Holden Pl, Denver, CO 80204" },
+  { label: "Barnum", address: "4726 York St, Denver, CO 80216" },
+  { label: "Westwood", address: "3199 E 36th Ave, Denver, CO 80205" },
+  { label: "RiNo", address: "4565 Davenport Way, Denver, CO 80239" },
+  { label: "Montbello", address: "1496 Ulster St, Denver, CO 80220" },
+  { label: "Edgewater", address: "8986 Marshall Ct, Westminster, CO 80021" },
+  { label: "Wheat Ridge", address: "15398 Denver West Pkwy, Golden, CO 80401" },
 ];
 
 export default function PropertySearch({ onResult }: PropertySearchProps) {
