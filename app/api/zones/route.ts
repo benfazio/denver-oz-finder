@@ -17,9 +17,7 @@ export async function GET() {
           name: tract.name,
           county: tract.county,
           designation: tract.designation,
-          medianIncome: tract.medianIncome,
-          povertyRate: tract.povertyRate,
-          boundaryGeoJson: JSON.stringify(tract.coordinates),
+          boundaryGeoJson: JSON.stringify(tract.geometry),
         },
       });
     }
@@ -36,10 +34,10 @@ export async function GET() {
   });
 
   const countMap = Object.fromEntries(
-    zoneCounts.map((z) => [z.censusTract, z._count.id])
+    zoneCounts.map((z: { censusTract: string | null; _count: { id: number } }) => [z.censusTract, z._count.id])
   );
 
-  const enriched = zones.map((z) => ({
+  const enriched = zones.map((z: { tractId: string; [key: string]: unknown }) => ({
     ...z,
     propertyCount: countMap[z.tractId] || 0,
   }));
