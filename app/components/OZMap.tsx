@@ -11,11 +11,12 @@ interface OZMapProps {
   searchMarker?: { lat: number; lng: number; label: string } | null;
 }
 
+// Meyers Roman palette
 const COUNTY_COLORS: Record<string, { color: string; fill: string }> = {
-  Denver: { color: "#2563eb", fill: "#60a5fa" },
-  Adams: { color: "#7c3aed", fill: "#a78bfa" },
-  Arapahoe: { color: "#059669", fill: "#34d399" },
-  Jefferson: { color: "#d97706", fill: "#fbbf24" },
+  Denver: { color: "#1F223F", fill: "#26328C" },
+  Adams: { color: "#2F335F", fill: "#3452FF" },
+  Arapahoe: { color: "#059669", fill: "#2AC4EA" },
+  Jefferson: { color: "#d97706", fill: "#FF1053" },
 };
 
 export default function OZMap({ onTractSelect, selectedTract, searchMarker }: OZMapProps) {

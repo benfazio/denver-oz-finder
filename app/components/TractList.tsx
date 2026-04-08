@@ -8,10 +8,10 @@ interface TractListProps {
 }
 
 const COUNTY_DOTS: Record<string, string> = {
-  Denver: "bg-blue-400",
-  Adams: "bg-violet-400",
-  Arapahoe: "bg-emerald-400",
-  Jefferson: "bg-amber-400",
+  Denver: "bg-blue-500",
+  Adams: "bg-violet-500",
+  Arapahoe: "bg-emerald-500",
+  Jefferson: "bg-amber-500",
 };
 
 export default function TractList({ onSelect, selectedTract }: TractListProps) {
@@ -23,34 +23,34 @@ export default function TractList({ onSelect, selectedTract }: TractListProps) {
 
   return (
     <div>
-      <h2 className="text-lg font-semibold text-gray-900 mb-1">OZ Directory</h2>
-      <p className="text-sm text-gray-500 mb-4">
-        {DENVER_OZ_TRACTS.length} officially designated zones across {Object.keys(byCounty).length} counties
+      <h2 className="text-lg font-bold text-navy mb-1">Zone Directory</h2>
+      <p className="text-xs text-mr-gray-400 mb-4">
+        {DENVER_OZ_TRACTS.length} officially designated Qualified Opportunity Zones
       </p>
 
-      <div className="space-y-5 max-h-[600px] overflow-y-auto pr-1">
+      <div className="space-y-5 max-h-[calc(100vh-300px)] overflow-y-auto pr-1">
         {Object.entries(byCounty)
           .sort(([a], [b]) => a.localeCompare(b))
           .map(([county, tracts]) => (
             <div key={county}>
-              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-                <span className={`w-2.5 h-2.5 rounded-full ${COUNTY_DOTS[county] || "bg-gray-400"}`} />
-                {county} County ({tracts.length})
+              <h3 className="text-[10px] font-bold text-mr-gray-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+                <span className={`w-2 h-2 rounded-full ${COUNTY_DOTS[county] || "bg-mr-gray-400"}`} />
+                {county} County &middot; {tracts.length} zones
               </h3>
               <div className="space-y-1">
                 {tracts.map((tract) => (
                   <button
                     key={tract.tractId}
                     onClick={() => onSelect(tract)}
-                    className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-all ${
+                    className={`w-full text-left px-3 py-2.5 rounded text-sm transition-all border ${
                       selectedTract?.tractId === tract.tractId
-                        ? "bg-blue-50 border border-blue-200 text-blue-900 shadow-sm"
-                        : "hover:bg-gray-50 border border-transparent"
+                        ? "bg-navy text-white border-navy shadow-sm"
+                        : "hover:bg-mr-gray-100 border-transparent hover:border-mr-gray-200"
                     }`}
                   >
-                    <div className="font-medium">{tract.name}</div>
-                    <div className="text-xs text-gray-400 mt-0.5">
-                      Tract {tract.tractId}
+                    <div className="font-semibold">{tract.name}</div>
+                    <div className={`text-[11px] mt-0.5 ${selectedTract?.tractId === tract.tractId ? "text-mr-gray-200" : "text-mr-gray-400"}`}>
+                      {tract.tractId}
                     </div>
                   </button>
                 ))}
@@ -59,10 +59,9 @@ export default function TractList({ onSelect, selectedTract }: TractListProps) {
           ))}
       </div>
 
-      <div className="mt-4 pt-4 border-t border-gray-100">
-        <p className="text-xs text-gray-400">
-          Source: US Treasury CDFI Fund, IRS Designated Qualified Opportunity Zones.
-          Boundaries from 2010 Census TIGER/Line.
+      <div className="mt-4 pt-3 border-t border-mr-gray-200">
+        <p className="text-[10px] text-mr-gray-400 uppercase tracking-wider">
+          Source: US Treasury CDFI Fund &middot; 2010 Census TIGER/Line
         </p>
       </div>
     </div>

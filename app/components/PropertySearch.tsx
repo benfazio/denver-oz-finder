@@ -38,7 +38,7 @@ export default function PropertySearch({ onResult }: PropertySearchProps) {
       const data = await response.json();
 
       if (!data || data.length === 0) {
-        setError("Address not found. Try a more specific address in the Denver area.");
+        setError("Address not found. Try a more specific address in the Denver metro area.");
         return;
       }
 
@@ -47,14 +47,7 @@ export default function PropertySearch({ onResult }: PropertySearchProps) {
       const longitude = parseFloat(lon);
       const tract = isPointInOZ(latitude, longitude);
 
-      const result: SearchResult = {
-        address: display_name,
-        lat: latitude,
-        lng: longitude,
-        inOZ: tract !== null,
-        tract,
-      };
-
+      const result: SearchResult = { address: display_name, lat: latitude, lng: longitude, inOZ: tract !== null, tract };
       setLastResult(result);
       onResult(result);
     } catch {
@@ -66,9 +59,9 @@ export default function PropertySearch({ onResult }: PropertySearchProps) {
 
   return (
     <div>
-      <h2 className="text-lg font-semibold text-gray-900 mb-1">Property Search</h2>
-      <p className="text-sm text-gray-500 mb-4">
-        Enter an address to check if it falls within a Federal Opportunity Zone.
+      <h2 className="text-lg font-bold text-navy mb-1">Address Lookup</h2>
+      <p className="text-xs text-mr-gray-400 mb-4">
+        Enter a property address to determine Opportunity Zone eligibility.
       </p>
 
       <div className="flex gap-2 mb-4">
@@ -78,47 +71,43 @@ export default function PropertySearch({ onResult }: PropertySearchProps) {
           onChange={(e) => setAddress(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && searchAddress()}
           placeholder="e.g. 2000 W Holden Pl, Denver, CO"
-          className="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="flex-1 px-3 py-2.5 border border-mr-gray-200 rounded text-sm focus:outline-none focus:ring-2 focus:ring-navy focus:border-transparent placeholder:text-mr-gray-400"
         />
         <button
           onClick={searchAddress}
           disabled={loading || !address.trim()}
-          className="px-5 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="px-5 py-2.5 bg-navy text-white text-xs font-semibold uppercase tracking-wider rounded hover:bg-navy-light disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           {loading ? "..." : "Search"}
         </button>
       </div>
 
       {error && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700 mb-4">
-          {error}
-        </div>
+        <div className="p-3 bg-red-50 border border-red-200 rounded text-sm text-red-700 mb-4">{error}</div>
       )}
 
       {lastResult && (
-        <div className={`p-4 rounded-lg border mb-4 ${lastResult.inOZ ? "bg-green-50 border-green-200" : "bg-gray-50 border-gray-200"}`}>
+        <div className={`p-4 rounded border mb-4 ${lastResult.inOZ ? "bg-emerald-50 border-emerald-200" : "bg-mr-gray-100 border-mr-gray-200"}`}>
           <div className="flex items-center gap-2 mb-2">
-            <span className={`w-3 h-3 rounded-full ${lastResult.inOZ ? "bg-green-500" : "bg-gray-400"}`} />
-            <span className={`font-semibold text-sm ${lastResult.inOZ ? "text-green-800" : "text-gray-600"}`}>
-              {lastResult.inOZ ? "IN OPPORTUNITY ZONE" : "NOT IN OPPORTUNITY ZONE"}
+            <span className={`w-2.5 h-2.5 rounded-full ${lastResult.inOZ ? "bg-emerald-500" : "bg-mr-gray-400"}`} />
+            <span className={`font-bold text-xs uppercase tracking-wider ${lastResult.inOZ ? "text-emerald-800" : "text-mr-gray-600"}`}>
+              {lastResult.inOZ ? "Qualified Opportunity Zone" : "Not in Opportunity Zone"}
             </span>
           </div>
-          <p className="text-sm text-gray-600 mb-1">{lastResult.address}</p>
-          <p className="text-xs text-gray-400">
-            {lastResult.lat.toFixed(6)}, {lastResult.lng.toFixed(6)}
-          </p>
+          <p className="text-sm text-mr-gray-600 mb-1">{lastResult.address}</p>
+          <p className="text-[11px] text-mr-gray-400">{lastResult.lat.toFixed(6)}, {lastResult.lng.toFixed(6)}</p>
           {lastResult.tract && (
-            <div className="mt-3 pt-3 border-t border-green-200 space-y-1">
-              <p className="text-sm text-green-800"><b>Zone:</b> {lastResult.tract.name}</p>
-              <p className="text-sm text-green-800"><b>Tract:</b> {lastResult.tract.tractId}</p>
-              <p className="text-sm text-green-800"><b>County:</b> {lastResult.tract.county}</p>
+            <div className="mt-3 pt-3 border-t border-emerald-200 space-y-1">
+              <p className="text-sm text-navy"><b>Zone:</b> {lastResult.tract.name}</p>
+              <p className="text-sm text-navy"><b>Tract:</b> {lastResult.tract.tractId}</p>
+              <p className="text-sm text-navy"><b>County:</b> {lastResult.tract.county}</p>
             </div>
           )}
         </div>
       )}
 
-      <div className="p-3 bg-gray-50 rounded-lg">
-        <h3 className="text-xs font-semibold text-gray-400 uppercase mb-2">Quick Search</h3>
+      <div className="p-3 bg-mr-gray-100 rounded border border-mr-gray-200">
+        <h3 className="text-[10px] font-bold text-mr-gray-400 uppercase tracking-wider mb-2">Quick Lookup</h3>
         <div className="flex flex-wrap gap-1.5">
           {[
             "Sun Valley, Denver, CO",
@@ -133,7 +122,7 @@ export default function PropertySearch({ onResult }: PropertySearchProps) {
             <button
               key={preset}
               onClick={() => setAddress(preset)}
-              className="px-2.5 py-1 text-xs bg-white border border-gray-200 rounded-md hover:bg-blue-50 hover:border-blue-300 transition-colors"
+              className="px-2.5 py-1 text-[11px] bg-white border border-mr-gray-200 rounded hover:bg-navy hover:text-white hover:border-navy transition-colors font-medium"
             >
               {preset.replace(", Denver, CO", "").replace(", CO", "")}
             </button>

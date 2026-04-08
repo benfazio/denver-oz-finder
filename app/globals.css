@@ -1,26 +1,68 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --navy: #1F223F;
+  --navy-light: #2F335F;
+  --blue: #26328C;
+  --blue-bright: #3452FF;
+  --accent: #FF1053;
+  --cyan: #2AC4EA;
+  --gray-100: #ECEBE9;
+  --gray-200: #D9D9D9;
+  --gray-400: #969696;
+  --gray-600: #4B4F52;
+  --gray-800: #313131;
+  --text: #1C1C20;
+  --white: #FFFFFF;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-navy: var(--navy);
+  --color-navy-light: var(--navy-light);
+  --color-mr-blue: var(--blue);
+  --color-mr-blue-bright: var(--blue-bright);
+  --color-mr-accent: var(--accent);
+  --color-mr-cyan: var(--cyan);
+  --color-mr-gray-100: var(--gray-100);
+  --color-mr-gray-200: var(--gray-200);
+  --color-mr-gray-400: var(--gray-400);
+  --color-mr-gray-600: var(--gray-600);
+  --color-mr-gray-800: var(--gray-800);
+  --color-mr-text: var(--text);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background: #f8f8f7;
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Leaflet overrides for professional look */
+.leaflet-popup-content-wrapper {
+  border-radius: 6px !important;
+  box-shadow: 0 4px 16px rgba(31, 34, 63, 0.15) !important;
+}
+
+.leaflet-popup-content {
+  margin: 12px 16px !important;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gray-200);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-400);
 }
